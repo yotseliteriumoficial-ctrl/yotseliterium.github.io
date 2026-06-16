@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yotseliterium - Mangas</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="icon" href="https://via.placeholder.com/32/32?text=M" type="image/x-icon">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            cursor: url('https://cur.cursors-4u.net/symbols/sym-1/sym46.ani'), auto;
+        }
+        .manga-table img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .carousel-inner img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+        .carousel-caption {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+        }
+        #cookie-banner {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(51, 51, 51, 0.9);
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            max-width: 300px;
+            z-index: 1001;
+        }
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .y-logo {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            margin: 0 auto;
+        }
+        .y-circle {
+            width: 120px;
+            height: 120px;
+            border: 3px solid rgba(255, 0, 0, 0.2);
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            box-sizing: border-box;
+            animation: rotateCircle 3s linear infinite;
+        }
+        .y-letter {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 70px;
+            font-weight: bold;
+            color: #ff0000;
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000;
+            font-family: Arial, sans-serif;
+            z-index: 2;
+            animation: glow 2s ease-in-out infinite;
+        }
+        @keyframes rotateCircle {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000; }
+            50% { text-shadow: 0 0 15px #ff3333, 0 0 25px #ff3333, 0 0 35px #ff3333; }
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            border-top-color: #ff0000;
+            animation: spin 1s ease-in-out infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .progress-bar {
+            width: 200px;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            width: 0%;
+            background-color: #ff0000;
+            animation: load 2s forwards;
+        }
+        @keyframes load {
+            to { width: 100%; }
+        }
+        .paypal-button {
+            display: inline-block;
+            background-color: #009cde;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            border: 2px solid #009cde;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .paypal-button:hover {
+            background-color: #0070ba;
+            border-color: #0070ba;
+        }
+        .whatsapp-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="y-logo">
+            <div class="y-circle"></div>
+            <div class="y-letter">Y</div>
+        </div>
+        <div class="loader-content">
+            <p class="loader-text" style="color: white; font-family: 'Roboto', sans-serif; font-size: 18px; margin-top: 20px; text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);">Cargando Yotseliterium...</p>
+            <div class="spinner"></div>
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <div class="container">
+            <h1>Yotseliterium - Mangas</h1>
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                    <div class="collapse navbar-collapse" id="navbar-collapse">
+                        <ul class="nav navbar-nav">
+                            <li><a href="#home">Inicio</a></li>
+                            <li><a href="#mangas">Mangas</a></li>
+                            <li><a href="#contacto">Contacto</a></li>
+                            <li><a href="correo.html">Sugerencias</a></li>
+                            <li><a href="yaoi.html">Yaoi</a></li>
+                        </ul>
+                        <form id="search-form" class="navbar-form navbar-right" role="search">
+                            <div class="form-group">
+                                <input type="text" id="search-input" class="form-control" placeholder="Buscar mangas">
+                            </div>
+                            <button type="submit" class="btn btn-default">Buscar</button>
+                        </form>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Carousel -->
+        <section id="home">
+            <div class="container">
+                <h2>Bienvenidos a Yotseliterium - Mangas</h2>
+                <div id="theCarousel" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <li data-target="#theCarousel" data-slide-to="0" class="active"></li>
+                        <li data-target="#theCarousel" data-slide-to="1"></li>
+                        <li data-target="#theCarousel" data-slide-to="2"></li>
+                        <li data-target="#theCarousel" data-slide-to="3"></li>
+                    </ol>
+                    <div class="carousel-inner" role="listbox">
+                        <div class="item active">
+                            <a href="one-piece.html"><img src="https://via.placeholder.com/800x400/0066cc/ffffff?text=One+Piece" alt="One Piece"></a>
+                            <div class="carousel-caption d-none d-md-block"></div>
+                        </div>
+                        <div class="item">
+                            <a href="attack-on-titan.html"><img src="https://via.placeholder.com/800x400/333333/ffffff?text=Attack+on+Titan" alt="Attack on Titan"></a>
+                            <div class="carousel-caption d-none d-md-block"></div>
+                        </div>
+                        <div class="item">
+                            <a href="kimetsu-no-yaiba.html"><img src="https://via.placeholder.com/800x400/cc0000/ffffff?text=Kimetsu+no+Yaiba" alt="Kimetsu no Yaiba"></a>
+                            <div class="carousel-caption d-none d-md-block"></div>
+                        </div>
+                        <div class="item">
+                            <a href="jujutsu-kaisen.html"><img src="https://via.placeholder.com/800x400/660066/ffffff?text=Jujutsu+Kaisen" alt="Jujutsu Kaisen"></a>
+                            <div class="carousel-caption d-none d-md-block"></div>
+                        </div>
+                    </div>
+                    <a class="left carousel-control" href="#theCarousel" role="button" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                        <span class="sr-only">Anterior</span>
+                    </a>
+                    <a class="right carousel-control" href="#theCarousel" role="button" data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                        <span class="sr-only">Siguiente</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mangas populares -->
+        <section id="mangas">
+            <div class="container">
+                <h2>Mangas Populares</h2>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <article class="manga">
+                            <a href="one-piece.html"><img src="https://m.media-amazon.com/images/I/91OyFYqYV-L._AC_UF1000,1000_QL80_.jpg" alt="One Piece"></a>
+                            <h3>One Piece</h3>
+                            <p>La épica aventura de Monkey D. Luffy y su tripulación en busca del tesoro definitivo.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="manga">
+                            <a href="attack-on-titan.html"><img src="https://m.media-amazon.com/images/I/81O3+WCo3SL._AC_UF1000,1000_QL80_.jpg" alt="Attack on Titan"></a>
+                            <h3>Attack on Titan</h3>
+                            <p>Humanidad al borde de la extinción lucha contra gigantes devoradores de hombres.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="manga">
+                            <a href="kimetsu-no-yaiba.html"><img src="https://m.media-amazon.com/images/I/816xQZQE1xL._AC_UF1000,1000_QL80_.jpg" alt="Kimetsu no Yaiba"></a>
+                            <h3>Kimetsu no Yaiba</h3>
+                            <p>Tanjiro se convierte en cazador de demonios para salvar a su hermana Nezuko.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="manga">
+                            <a href="jujutsu-kaisen.html"><img src="https://m.media-amazon.com/images/I/81l2TgwaEHL._AC_UF1000,1000_QL80_.jpg" alt="Jujutsu Kaisen"></a>
+                            <h3>Jujutsu Kaisen</h3>
+                            <p>Yuji Itadori se une a una organización de hechiceros para combatir maldiciones.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="manga">
+                            <a href="chainsaw-man.html"><img src="https://m.media-amazon.com/images/I/81U3WgNQpSL._AC_UF1000,1000_QL80_.jpg" alt="Chainsaw Man"></a>
+                            <h3>Chainsaw Man</h3>
+                            <p>Denji, un joven con el corazón de un demonio, lucha contra el mal como Chainsaw Man.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="manga">
+                            <a href="my-hero-academia.html"><img src="https://m.media-amazon.com/images/I/81O2WJq5YtL._AC_UF1000,1000_QL80_.jpg" alt="My Hero Academia"></a>
+                            <h3>My Hero Academia</h3>
+                            <p>Izuku Midoriya sueña con convertirse en el mayor héroe del mundo.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="manga">
+                            <a href="tokyo-revengers.html"><img src="https://m.media-amazon.com/images/I/81jJZQ1JQIL._AC_UF1000,1000_QL80_.jpg" alt="Tokyo Revengers"></a>
+                            <h3>Tokyo Revengers</h3>
+                            <p>Takemichi viaja en el tiempo para salvar a su exnovia y cambiar el futuro.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="manga">
+                            <a href="spy-x-family.html"><img src="https://m.media-amazon.com/images/I/81Y2uKgqWIL._AC_UF1000,1000_QL80_.jpg" alt="Spy x Family"></a>
+                            <h3>Spy x Family</h3>
+                            <p>Un espía, una asesina y una niña telepática forman una familia falsa.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="manga">
+                            <a href="demon-slayer.html"><img src="https://m.media-amazon.com/images/I/817tHN1c2AL._AC_UF1000,1000_QL80_.jpg" alt="Demon Slayer"></a>
+                            <h3>Demon Slayer</h3>
+                            <p>Tanjiro y Nezuko buscan una cura para la maldición de ella.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="manga">
+                            <a href="haikyuu.html"><img src="https://m.media-amazon.com/images/I/811tYVQ5wnL._AC_UF1000,1000_QL80_.jpg" alt="Haikyuu!!"></a>
+                            <h3>Haikyuu!!</h3>
+                            <p>Shoyo Hinata y su equipo luchan por ser los mejores en el voleibol.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="manga">
+                            <a href="black-clover.html"><img src="https://m.media-amazon.com/images/I/81QjJxYQ3UL._AC_UF1000,1000_QL80_.jpg" alt="Black Clover"></a>
+                            <h3>Black Clover</h3>
+                            <p>Asta y Yuno compiten por convertirse en el próximo Magic Emperor.</p>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contacto -->
+        <section id="contacto">
+            <div class="container">
+                <h2>Contacto</h2>
+                <div style="text-align: center;">
+                    <a href="https://wa.me/5218711407732/?text=Hola%20Yotseliterium%20:)" target="_blank" class="whatsapp-button">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="30" height="30" alt="WhatsApp">
+                    </a>
+                    <br><br>
+                    <a class="paypal-button" href="https://paypal.me/YotSeliterium?country.x=MX&locale.x=es_XC" target="_blank">
+                        <img class="paypal-logo" src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" alt="PayPal">
+                        Donar con PayPal
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Yotseliterium. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Cookie Banner -->
+    <div id="cookie-banner">
+        <img src="https://via.placeholder.com/150/ff9900/ffffff?text=Konnichiwa" alt="Konnichiwa" style="border-radius: 5px;">
+        <p>Esta página utiliza cookies para mejorar la experiencia del usuario.</p>
+        <button onclick="acceptCookies()">Aceptar</button>
+    </div>
+
+    <audio id="myAudio" src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3" type="audio/mpeg" style="display:none;"></audio>
+
+    <script>
+        setTimeout(function() {
+            document.getElementById('loader').style.display = 'none';
+        }, 2000);
+
+        function acceptCookies() {
+            document.cookie = "cookiesAccepted=true; path=/";
+            document.getElementById('cookie-banner').style.display = 'none';
+            document.getElementById('myAudio').play();
+        }
+
+        window.onload = function() {
+            if (document.cookie.includes("cookiesAccepted=true")) {
+                document.getElementById('cookie-banner').style.display = 'none';
+            }
+        }
+
+        document.getElementById('search-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            let searchQuery = document.getElementById('search-input').value.toLowerCase();
+            let mangaArticles = document.querySelectorAll('.manga');
+
+            mangaArticles.forEach(function(article) {
+                let mangaTitle = article.querySelector('h3').textContent.toLowerCase();
+                if (mangaTitle.includes(searchQuery)) {
+                    article.style.display = '';
+                } else {
+                    article.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

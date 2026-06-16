@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yotseliterium - Animes</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="icon" href="dragon.png" type="image/x-icon">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            cursor: url('ani.gif'), auto;
+        }
+        .anime-table img {
+            width: 100%;
+            height: auto;
+        }
+        .anime-table {
+            width: 100%;
+        }
+        .carousel-inner img {
+            width: 100%;
+            height: auto;
+        }
+        .carousel-caption {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+        }
+        .cookie-consent {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            text-align: center;
+            padding: 10px;
+            z-index: 1000;
+        }
+        .cookie-consent button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        .whatsapp-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .whatsapp-button:hover {
+            background-color: #128C7E;
+        }
+        #cookie-banner {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(51, 51, 51, 0.9);
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            max-width: 300px;
+            z-index: 1001;
+        }
+        #cookie-banner img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        #cookie-banner p {
+            margin: 0 0 10px;
+            font-size: 16px;
+        }
+        #cookie-banner button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        #cookie-banner button:hover {
+            background-color: #45a049;
+        }
+        .paypal-button {
+            display: inline-block;
+            background-color: #009cde;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            border: 2px solid #009cde;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .paypal-button:hover {
+            background-color: #0070ba;
+            border-color: #0070ba;
+        }
+        .paypal-logo {
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        /* Estilo para la animación de carga con "Y" luminosa */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loader-content {
+            text-align: center;
+            color: white;
+        }
+
+        .loader-text {
+            font-family: 'Roboto', sans-serif;
+            font-size: 18px;
+            margin-top: 20px;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        /* "Y" luminosa */
+        .y-logo {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .y-circle {
+            width: 120px;
+            height: 120px;
+            border: 3px solid rgba(255, 0, 0, 0.2);
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            box-sizing: border-box;
+            animation: rotateCircle 3s linear infinite;
+        }
+
+        .y-letter {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 70px;
+            font-weight: bold;
+            color: #ff0000;
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000;
+            font-family: Arial, sans-serif;
+            z-index: 2;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes rotateCircle {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000;
+            }
+            50% {
+                text-shadow: 0 0 15px #ff3333, 0 0 25px #ff3333, 0 0 35px #ff3333;
+            }
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            border-top-color: #ff0000;
+            animation: spin 1s ease-in-out infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            width: 0%;
+            background-color: #ff0000;
+            animation: load 2s forwards;
+        }
+
+        @keyframes load {
+            to {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loader con "Y" luminosa -->
+    <div class="loader" id="loader">
+        <div class="y-logo">
+            <div class="y-circle"></div>
+            <div class="y-letter">Y</div>
+        </div>
+        <div class="loader-content">
+            <p class="loader-text">Cargando Yotseliterium...</p>
+            <div class="spinner"></div>
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <div class="container">
+            <h1>Yotseliterium</h1>
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                    <div class="collapse navbar-collapse" id="navbar-collapse">
+                        <ul class="nav navbar-nav">
+                            <li><a href="#home">Inicio</a></li>
+                            <li><a href="#animes">Animes</a></li>
+                            <li><a href="#contacto">Contacto</a></li>
+                            <li><a href="correo.html">Sugerencias</a></li>
+                            <li><a href="index2.html">Yaoi</a></li>
+                        </ul>
+                        <form id="search-form" class="navbar-form navbar-right" role="search">
+                            <div class="form-group">
+                                <input type="text" id="search-input" class="form-control" placeholder="Buscar animes">
+                            </div>
+                            <button type="submit" class="btn btn-default">Buscar</button>
+                        </form>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <section id="home">
+            <div class="container">
+                <h2>Bienvenidos a Yotseliterium</h2>
+                <div id="theCarousel" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <li data-target="#theCarousel" data-slide-to="0" class="active"></li>
+                        <li data-target="#theCarousel" data-slide-to="1"></li>
+                        <li data-target="#theCarousel" data-slide-to="2"></li>
+                        <li data-target="#theCarousel" data-slide-to="3"></li>
+                    </ol>
+                    <div class="carousel-inner" role="listbox">
+                        <div class="item active">
+                            <a href="susurros.html"><img src="susurrosenelcorazon.jpg" alt="Susurros en el corazón"></a>
+                            <div class="carousel-caption d-none d-md-block"></div>
+                        </div>
+                        <div class="item">
+                            <a href="demon.html"><img src="demon1.jpg" alt="Demon Slayer"></a>
+                            <div class="carousel-caption d-none d-md-block"></div>
+                        </div>
+                        <div class="item">
+                            <a href="gata.html"><img src="gataamor.jpg" alt="Amor de gata"></a>
+                            <div class="carousel-caption d-none d-md-block"></div>
+                        </div>
+                        <div class="item">
+                            <a href="hogar.html"><img src="hogar-a-la-deriva.png" alt="Hogar a la deriva"></a>
+                            <div class="carousel-caption d-none d-md-block"></div>
+                        </div>
+                        <div class="item">
+                            <a href="vozcilenciosa.html"><img src="una-voz-silenciosa.png" alt="Una voz silenciosa"></a>
+                            <div class="carousel-caption d-none d-md-block"></div>
+                        </div>
+                    </div>
+                    <a class="left carousel-control" href="#theCarousel" role="button" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                        <span class="sr-only">Anterior</span>
+                    </a>
+                    <a class="right carousel-control" href="#theCarousel" role="button" data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                        <span class="sr-only">Siguiente</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="animes">
+            <div class="container">
+                <h2>Animes Populares</h2>
+                <div class="row">
+                    <!-- Tarjetas de animes existentes -->
+                    <div class="col-sm-4">
+                        <article class="anime">
+                            <a href="gata.html"><img src="amordegata1.jpg" alt="Amor de gata"></a>
+                            <h3>Amor de gata</h3>
+                            <p>Chica se transforma en gata para conquistar a su enamorado.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="anime">
+                            <a href="susurros.html"><img src="Susurros.png" alt="Susurros en el corazón"></a>
+                            <h3>Susurros en el corazón</h3>
+                            <p>Amor juvenil inspira aspiraciones personales y descubre el poder de los sueños.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="anime">
+                            <a href="vozcilenciosa.html"><img src="voz.png" alt="Una voz silenciosa"></a>
+                            <h3>Una voz silenciosa</h3>
+                            <p>Una película de anime emotiva sobre redención y segundas oportunidades.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="anime">
+                            <a href="hogar.html"><img src="Hogar_A_La_Deriva.png" alt="Hogar a la deriva"></a>
+                            <h3>Hogar a la deriva</h3>
+                            <p>Una historia emotiva sobre encontrar hogar en tiempos difíciles.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="anime">
+                            <a href="animes.html"><img src="tomo1.jpg" alt="Tomo-chan wa Onnanoko"></a>
+                            <h3>Tomo-chan wa Onnanoko</h3>
+                            <p>Tomo confiesa su amor a Jun, pero él la ve como amigo.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="anime">
+                            <a href="eltiempocontigo.html"><img src="contigo2.jpg" alt="El tiempo contigo"></a>
+                            <h3>El tiempo contigo</h3>
+                            <p>Joven controla el clima, desata amor y enfrenta desafíos mágicos.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="anime">
+                            <a href="niñogarza.html"><img src="garza.jpg" alt="El niño y la garza"></a>
+                            <h3>El niño y la garza</h3>
+                            <p>Un niño encuentra una garza mágica que cambia su vida.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="anime">
+                            <a href="deku.html"><img src="deku/portada2.jpg" alt="My Hero Academia"></a>
+                            <h3>My Hero Academia</h3>
+                            <p>Estudiantes entrenan para convertirse en héroes en un mundo superpoderoso.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="anime">
+                            <a href="Shinigami Bocchan a Kuro Maid.html"><img src="https://ramenparados.com/wp-content/uploads/2021/02/Shinigami-Bocchan-to-Kuro-Maid-key-anime.jpg" alt="Shinigami Bocchan to Kuro Maid"></a>
+                            <h3>Shinigami Bocchan to Kuro Maid</h3>
+                            <p>Joven noble maldito es atendido por su leal y amorosa sirvienta.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="anime">
+                            <a href="tumba.html"><img src="tumba.jpg" alt="La tumba de las luciérnagas"></a>
+                            <h3>La tumba de las luciérnagas</h3>
+                            <p>Dos hermanos luchan por sobrevivir en la Japón de la posguerra.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="anime">
+                            <a href="YoujoSenki.html"><img src="Youjosenki.jpg" alt="Yōjo Senki"></a>
+                            <h3>Yōjo Senki</h3>
+                            <p>Una niña soldado en guerra tiene la mente de un adulto.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="anime">
+                            <a href="Agata.html"><img src="Agata.jpg" alt="Viaje a Agartha"></a>
+                            <h3>Viaje a Agartha</h3>
+                            <p>Una travesía mágica llena de descubrimientos y sorpresas.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="anime">
+                            <a href="dvzhero.html"><img src="dvzsuper.jpg" alt="Dragon Ball Super: Super Hero"></a>
+                            <h3>Dragon Ball Super: Super Hero</h3>
+                            <p>Guerreros defienden la Tierra contra nuevos enemigos.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="anime">
+                            <a href="quintillisas.html"><img src="quintillizas.jpg" alt="Las quintillizas por excelencia"></a>
+                            <h3>Las quintillizas por excelencia (Go-Toubun no Hanayome)</h3>
+                            <p>Cinco hermanas se enamoran de su tutor, compitiendo por su amor.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="anime">
+                            <a href="elniñoylabestia.html"><img src="bestia111.jpg" alt="El niño y la bestia"></a>
+                            <h3>Bakemono no ko - El niño y la bestia</h3>
+                            <p>Un niño huérfano se convierte en aprendiz de una bestia poderosa.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="anime">
+                            <a href="UndeadUnluck.html"><img src="UndeadUnluck11.png" alt="Undead Unluck"></a>
+                            <h3>Undead Unluck</h3>
+                            <p>Un hombre inmortal y una chica con suerte desafortunada se encuentran.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="anime">
+                            <a href="demon.html"><img src="Demon.png" alt="Demon Slayer: Castillo infinito"></a>
+                            <h3>Demon Slayer: Castillo infinito</h3>
+                            <p>Tanjiro y los Pilares enfrentan a Muzan en el Castillo Infinito.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="anime">
+                            <a href="UmibenoEtranger.html"><img src="shunmio1.jpg" alt="Un extraño a la orilla del mar"></a>
+                            <h3>Un extraño a la orilla del mar</h3>
+                            <p>Romance entre dos chicos que encuentran el amor.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="anime">
+                            <a href="bocchitherock.html"><img src="rockportada3.jpg" alt="BOCCHI THE ROCK!"></a>
+                            <h3>BOCCHI THE ROCK!</h3>
+                            <p>Hitori "Bocchi" Gotou supera su ansiedad al tocar la guitarra en una banda.</p>
+                        </article>
+                    </div>
+                    <div class="col-sm-4">
+                        <article class="anime">
+                            <a href="zerotwo.html">
+                                <img src="https://es.web.img3.acsta.net/c_310_420/pictures/20/09/24/17/28/5295254.jpg" alt="Zero Two - Darling in the FranXX">
+                            </a>
+                            <h3>Zero Two</h3>
+                            <p>Personaje icónico de Darling in the FranXX, conocida por su carisma y conexión única con Hiro.</p>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contacto">
+            <div class="container">
+                <h2>Contacto</h2>
+                <div style="text-align: center;">
+                    <a href="https://wa.me/5218711407732/?text=Hola%20Yotseliterium%20:)" target="_blank">
+                        <img src="whatsapp.png" width="50" height="50" alt="WhatsApp">
+                    </a>
+                    <br><br>
+                    <a class="paypal-button" href="https://paypal.me/YotSeliterium?country.x=MX&locale.x=es_XC" target="_blank">
+                        <img class="paypal-logo" src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" alt="PayPal">
+                        Donar con PayPal
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Yotseliterium. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <div id="cookie-banner">
+        <img src="hola1.png" alt="Konnichiwa">
+        <p>Esta página utiliza cookies para mejorar la experiencia del usuario.</p>
+        <button onclick="acceptCookies()">Aceptar</button>
+    </div>
+
+    <audio id="myAudio" src="konnichiwa_shinobu.mp4" type="audio/mp3" style="display:none;"></audio>
+
+    <script>
+        // Ocultar el loader después de 2 segundos
+        setTimeout(function() {
+            document.getElementById('loader').style.display = 'none';
+        }, 2000);
+
+        function acceptCookies() {
+            document.cookie = "cookiesAccepted=true; path=/";
+            document.getElementById('cookie-banner').style.display = 'none';
+            document.getElementById('myAudio').play();
+        }
+
+        window.onload = function() {
+            if (document.cookie.includes("cookiesAccepted=true")) {
+                document.getElementById('cookie-banner').style.display = 'none';
+                document.getElementById('myAudio').play();
+            }
+        }
+
+        document.getElementById('search-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            let searchQuery = document.getElementById('search-input').value.toLowerCase();
+            let animeArticles = document.querySelectorAll('.anime');
+
+            animeArticles.forEach(function(article) {
+                let animeTitle = article.querySelector('h3').textContent.toLowerCase();
+                if (animeTitle.includes(searchQuery)) {
+                    article.style.display = '';
+                } else {
+                    article.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
