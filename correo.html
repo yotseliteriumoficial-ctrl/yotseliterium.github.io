@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sugerencias</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #fce4ec;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+        #suggestionForm {
+            display: none;
+            background-color: #fff;
+            border: 2px solid #ff80ab;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: transparent;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #ff4081;
+        }
+        .close-button:hover {
+            color: #f50057;
+        }
+        .field {
+            margin-bottom: 15px;
+        }
+        .field label {
+            display: block;
+            font-size: 14px;
+            color: #ff4081;
+            margin-bottom: 5px;
+        }
+        .field input, .field textarea {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ff80ab;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        textarea {
+            resize: vertical;
+        }
+        input[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #ff4081;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background-color: #f50057;
+        }
+        .button-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #ff80ab;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            outline: none;
+        }
+        button:hover {
+            background-color: #ff4081;
+        }
+        .tooltip {
+            position: absolute;
+            bottom: 50px;
+            background-color: #ff80ab;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            white-space: nowrap;
+            margin-bottom: 10px;
+        }
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #ff80ab transparent transparent transparent;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>
+        emailjs.init('tnGDRmWdoue826L-J'); // Replace with your User ID from EmailJS
+
+        function toggleForm() {
+            var form = document.getElementById('suggestionForm');
+            form.style.display = form.style.display === "none" ? "block" : "none";
+        }
+
+        function closeForm() {
+            var form = document.getElementById('suggestionForm');
+            form.style.display = "none";
+        }
+
+        function submitForm(event) {
+            event.preventDefault();
+
+            const btn = document.getElementById('button');
+            btn.value = 'Sending...';
+
+            const serviceID = 'default_service';
+            const templateID = 'template_joflhzs';
+
+            emailjs.sendForm(serviceID, templateID, '#form')
+                .then(() => {
+                    btn.value = 'Send Email';
+                    alert('Sent!');
+                    playThankYouSound();
+                }, (err) => {
+                    btn.value = 'Send Email';
+                    alert(JSON.stringify(err));
+                });
+        }
+
+        function playThankYouSound() {
+            var audio = new Audio('arigato.mp4');
+            audio.play();
+        }
+    </script>
+</head>
+<body>
+    <div class="button-container">
+        <div class="tooltip">Presióname</div>
+        <button onclick="toggleForm()">Sugerencias</button>
+    </div>
+    <div id="suggestionForm">
+        <button class="close-button" onclick="closeForm()">✖</button>
+        <h2>Envía tu Sugerencia</h2>
+        <form id="form" onsubmit="submitForm(event)">
+            <div class="field">
+                <label for="mensaje">Mensaje</label>
+                <textarea name="mensaje" id="mensaje" rows="4"></textarea>
+            </div>
+            <div class="field">
+                <label for="Email">Email</label>
+                <input type="text" name="Email" id="Email">
+            </div>
+            <input type="submit" id="button" value="Send Email">
+        </form>
+    </div>
+</body>
+</html>
